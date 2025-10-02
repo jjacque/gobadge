@@ -1,5 +1,5 @@
 # GOBadge
-![Coverage](https://img.shields.io/badge/Coverage-77.0%25-brightgreen)
+![Coverage](https://img.shields.io/badge/Coverage-77.3%25-brightgreen)
 
 #### 👆 Easily create and insert coverage badge (or any other badge) in your readme with go
 

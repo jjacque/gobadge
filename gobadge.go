@@ -123,9 +123,10 @@ func updateReadme(target string, coverage string, label string, color string, li
 
 	// Possible regex exprs with and without link
 	// Playground: https://goplay.tools/snippet/GWvkx43QndT
+	baseRegex := fmt.Sprintf(`\[%s\]\(https:\/\/img\.shields\.io\/badge\/(\w+)`, regexp.QuoteMeta(label))
 	badgeRegexes := []*regexp.Regexp{
-		regexp.MustCompile(`\[!\[(\w+)\]\(https:\/\/img\.shields\.io\/badge\/(\w+)-([\d\.%]+)-(\w+)\)\]\((.*)\)`),
-		regexp.MustCompile(`!\[(\w+)\]\(https:\/\/img\.shields\.io\/badge\/(\w+)-([\d\.%]+)-(\w+)\)`),
+		regexp.MustCompile(fmt.Sprintf(`\[!%s-([\d\.%%]+)-(\w+)\)\]\((.*)\)`, baseRegex)),
+		regexp.MustCompile(fmt.Sprintf(`!%s-([\d\.%%]+)-(\w+)\)`, baseRegex)),
 	}
 
 	newBadge := "![" + label + "](https://img.shields.io/badge/" + encodedLabel + "-" + encodedCoverage + "-" + color + ")"
