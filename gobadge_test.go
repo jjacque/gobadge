@@ -42,6 +42,25 @@ func TestGenerateBadge(t *testing.T) {
 	assert.Equal(t, nil, err)
 	validateFileContent(t, "test.md", "## Header\n![Coverage](https://img.shields.io/badge/Coverage-33.3%25-red)\nDescription...\n")
 
+	// Test the creation of 2 differents badges
+	createFile("test.md", "## Header\nDescription...\n")
+	createFile("testF.txt", "github.com/AlexBeauchemin/go-coverage-badge/gobadge.go:53:	updateReadme\n80.0%total:                                                          (statements)            33.3%")
+	createFile("testS.txt", "github.com/AlexBeauchemin/go-coverage-badge/gobadge.go:53:	updateReadme\n80.0%total:                                                          (statements)            66.6%")
+	err = generateBadge("testF.txt", "test.md", &Params{"FirstCoverage", Threshold{50, 70}, "", "", ""})
+	assert.Equal(t, nil, err)
+	err = generateBadge("testS.txt", "test.md", &Params{"SecondCoverage", Threshold{50, 70}, "", "", ""})
+	assert.Equal(t, nil, err)
+	validateFileContent(t, "test.md", "## Header\n![SecondCoverage](https://img.shields.io/badge/SecondCoverage-66.6%25-yellow)\n![FirstCoverage](https://img.shields.io/badge/FirstCoverage-33.3%25-red)\nDescription...\n")
+
+	// Update 2 different badges
+	createFile("testF.txt", "github.com/AlexBeauchemin/go-coverage-badge/gobadge.go:53:	updateReadme\n80.0%total:                                                          (statements)            75.0%")
+	createFile("testS.txt", "github.com/AlexBeauchemin/go-coverage-badge/gobadge.go:53:	updateReadme\n80.0%total:                                                          (statements)            100.0%")
+	err = generateBadge("testF.txt", "test.md", &Params{"FirstCoverage", Threshold{50, 80}, "", "", ""})
+	assert.Equal(t, nil, err)
+	err = generateBadge("testS.txt", "test.md", &Params{"SecondCoverage", Threshold{50, 70}, "", "", ""})
+	assert.Equal(t, nil, err)
+	validateFileContent(t, "test.md", "## Header\n![SecondCoverage](https://img.shields.io/badge/SecondCoverage-100.0%25-brightgreen)\n![FirstCoverage](https://img.shields.io/badge/FirstCoverage-75.0%25-yellow)\nDescription...\n")
+
 	// Create a badge and use the provided value as coverage
 	createFile("test.md", "## Header\nDescription...\n")
 	err = generateBadge("unknown.out", "test.md", &Params{"Coverage", Threshold{50, 70}, "", "55%", ""})

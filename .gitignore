@@ -8,6 +8,8 @@
 # Test binary, built with `go test -c`
 *.test
 test.txt
+testS.txt
+testF.txt
 test.md
 
 # Output of the go coverage tool, specifically when used with LiteIDE
