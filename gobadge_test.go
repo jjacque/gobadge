@@ -1,7 +1,6 @@
 package main
 
 import (
-	"io/ioutil"
 	"os"
 	"testing"
 
@@ -17,8 +16,8 @@ func createFile(path string, content string) {
 	}
 
 	file, _ := os.Create(path)
-	file.WriteString(content)
-	file.Sync()
+	_, _ = file.WriteString(content)
+	_ = file.Sync()
 
 	defer file.Close()
 }
@@ -28,7 +27,7 @@ func deleteFile(path string) {
 }
 
 func validateFileContent(t *testing.T, path string, content string) {
-	input, _ := ioutil.ReadFile(path)
+	input, _ := os.ReadFile(path)
 	assert.Equal(t, content, string(input))
 }
 
